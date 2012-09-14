@@ -41,7 +41,8 @@
       'sceneTimer': 750,
       'fixedTimer': false,
       'arrowLeft': 37,
-      'arrowRight': 39
+      'arrowRight': 39,
+      'keyboardSupport': true
     }, options);
 
     // gloval vars
@@ -63,15 +64,17 @@
             current = $('.active.'+settings.sceneContainerClass).data('scene');
             methods.moveTo.apply();
           });
-
-          $(document).keyup(function(e){
-            if ( e.which == settings.arrowLeft ) {
-              methods.prev.apply();
-            }
-            if ( e.which == settings.arrowRight ) {
-              methods.next.apply();
-            }
-          });
+          // if keyboard support is enabled, i bind keys, by default arrow left and right
+          if ( settings.keyboardSupport ) {
+            $(document).keyup(function(e){
+              if ( e.which == settings.arrowLeft ) {
+                methods.prev.apply();
+              }
+              if ( e.which == settings.arrowRight ) {
+                methods.next.apply();
+              }
+            });
+          }
 
           methods.fixWidth.apply();
         },

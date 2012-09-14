@@ -1,6 +1,6 @@
 /*!
-* jQuery xParallax Plugin
-* Version 1.0.0 Alpha (14-SEP-2012)
+* jQuery xMovie Plugin
+* Version 1.0.1 Beta (14-SEP-2012)
 * Written by Chris Campoli (me{at}campolichristian.com)
 * @requires jQuery v1.8.1 or later
 *
@@ -27,7 +27,7 @@
 */
 
 (function( $ ) {
-  $.fn.xParallax = function(options) {
+  $.fn.xMovie = function(options) {
     // defaults to extend options
     var settings = $.extend({
       'width': 1000,
@@ -39,7 +39,9 @@
       'activeSceneClass': 'active',
       'startingScene': 1,
       'sceneTimer': 750,
-      'fixedTimer': false
+      'fixedTimer': false,
+      'arrowLeft': 37,
+      'arrowRight': 39
     }, options);
 
     // gloval vars
@@ -62,6 +64,15 @@
             methods.moveTo.apply();
           });
 
+          $(document).keyup(function(e){
+            if ( e.which == settings.arrowLeft ) {
+              methods.prev.apply();
+            }
+            if ( e.which == settings.arrowRight ) {
+              methods.next.apply();
+            }
+          });
+
           methods.fixWidth.apply();
         },
         fixWidth : function() { 
@@ -81,9 +92,19 @@
             $('.'+settings.sceneContainerClass).removeClass(settings.activeSceneClass);
             $('.'+settings.sceneContainerClass+'[data-scene="'+target+'"]').addClass(settings.activeSceneClass);
             $('#'+settings.filmId).animate({left: offset}, time);
+            current = target;
         },
         next : function() {
-          
+          if (  $('.'+settings.sceneContainerClass+'[data-scene="'+(current+1)+'"]').length ) {
+            target = current + 1;
+            methods.moveTo.apply();
+          }
+        },
+        prev : function() {
+          if (  $('.'+settings.sceneContainerClass+'[data-scene="'+(current-1)+'"]').length ) {
+            target = current -1;
+            methods.moveTo.apply();
+          }
         }
     };
 

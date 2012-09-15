@@ -64,7 +64,7 @@
             current = $('.active.'+settings.sceneContainerClass).data('scene');
             methods.moveTo.apply();
           });
-          // if keyboard support is enabled, i bind keys, by default arrow left and right
+          // key binding if keyboard support is enabled, by default arrow left and right
           if ( settings.keyboardSupport ) {
             $(document).keyup(function(e){
               if ( e.which == settings.arrowLeft ) {
@@ -113,6 +113,7 @@
 
     // method setup
     return this.each(function(methodOrOptions) {
+      console.log('Method: '+methodOrOptions);
       if ( methods[methodOrOptions] ) {
         return methods[ methodOrOptions ].apply( this, Array.prototype.slice.call( arguments, 1 ));
       } else if ( typeof methodOrOptions === 'object' || ! methodOrOptions ) {

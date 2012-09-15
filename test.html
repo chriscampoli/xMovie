@@ -19,6 +19,7 @@ body { background: #99d7f6; position: relative; }
 </style>
 </head>
 <body>
+  <span id="test">TESTAMI</span>
 	<div id="screen">
 		<div id="film">
 			<div id="background">
@@ -50,6 +51,9 @@ body { background: #99d7f6; position: relative; }
 <script>
 $(function(){
   $("#film").xMovie();
+  $("#test").click(function(){
+    $("#film").xMovie('next');
+  });
 });
 </script>
 </body>

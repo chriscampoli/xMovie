@@ -42,7 +42,8 @@
       'fixedTimer': false,
       'arrowLeft': 37,
       'arrowRight': 39,
-      'keyboardSupport': true
+      'keyboardSupport': true,
+      'duration': 1000
     }, options);
 
     // gloval vars
@@ -64,6 +65,9 @@
             current = $('.active.'+settings.sceneContainerClass).data('scene');
             methods.moveTo.apply();
           });
+          $("#play").click(function(){
+            methods.play.apply();
+          });  
           // key binding if keyboard support is enabled, by default arrow left and right
           if ( settings.keyboardSupport ) {
             $(document).keyup(function(e){
@@ -108,6 +112,13 @@
             target = current -1;
             methods.moveTo.apply();
           }
+        },
+        play : function() {
+            console.log('play');
+            methods.next.apply();
+	    setTimeout(function(){
+              methods.play.apply();
+            }, 5000);
         }
     };
 

@@ -5,10 +5,10 @@
 * @requires jQuery v1.8.1 or later
 *
 * Copyright (c) 2012 xKraty
-* 
+*
 * Permission is hereby granted, free of charge, to any person obtaining
 * a copy of this software and associated documentation files (the
-* "Software"), to deal in the Software without restriction, including 
+* "Software"), to deal in the Software without restriction, including
 * without limitation the rights to use, copy, modify, merge, publish,
 * distribute, sublicense, and/or sell copies of the Software, and to
 * permit persons to whom the Software is furnished to do so, subject to
@@ -26,7 +26,7 @@
 * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-(function( $ ) {
+(function($) {
   $.fn.xMovie = function(options) {
     // defaults to extend options
     var settings = $.extend({
@@ -48,90 +48,93 @@
 
     // gloval vars
     var windowWidth = 0;
-    var current = parseInt(settings.startingScene); 
+    var current = parseInt(settings.startingScene);
     var target = current + 1;
-   
+
     // methods
     var methods = {
-        init : function(options) {
-          // setting active 
-          $('.'+settings.sceneContainerClass+'[data-scene="'+settings.startingScene+'"]').addClass(settings.activeSceneClass);
-          $(window).resize(function(){
-            methods.fixWidth.apply();
-          });
-
-          $('.move').click(function(){
-            target =  $(this).data('target');
-            current = $('.active.'+settings.sceneContainerClass).data('scene');
-            methods.moveTo.apply();
-          });
-          $("#play").click(function(){
-            methods.play.apply();
-          });  
-          // key binding if keyboard support is enabled, by default arrow left and right
-          if ( settings.keyboardSupport ) {
-            $(document).keyup(function(e){
-              if ( e.which == settings.arrowLeft ) {
-                methods.prev.apply();
-              }
-              if ( e.which == settings.arrowRight ) {
-                methods.next.apply();
-              }
-            });
-          }
-
+      init: function(options) {
+        // setting active
+        $('.' + settings.sceneContainerClass + '[data-scene="' + settings.startingScene + '"]').addClass(settings.activeSceneClass);
+        $(window).resize(function() {
           methods.fixWidth.apply();
-        },
-        fixWidth : function() { 
-            windowWidth = $(window).width();
-            // setting up scene container area to window width
-            // if the window is too small scene area is set to <width>
-            $('.'+settings.sceneContainerClass).width(windowWidth > settings.width ? windowWidth : settings.width );
-        },
-        moveTo : function() {
-            target = parseInt(target) || 1;
-            var offset = - ( windowWidth * (target-1) ); // target - 1 because i have to move *to* X scene and not move *of* X scene
-            if ( settings.fixedTimer ) {
-              var time = settings.sceneTimer;
-            } else {
-              var time = Math.abs(( target - current ) * settings.sceneTimer); // absolute number for backward movements
+        });
+
+        $('.move').click(function() {
+          target =  $(this).data('target');
+          current = $('.active.' + settings.sceneContainerClass).data('scene');
+          methods.moveTo.apply();
+        });
+
+        $("#play").click(function() {
+          methods.play.apply();
+        });
+
+        // key binding if keyboard support is enabled, by default arrow left and right
+        if (settings.keyboardSupport) {
+          $(document).keyup(function(e) {
+            if (e.which == settings.arrowLeft) {
+              methods.prev.apply();
             }
-            $('.'+settings.sceneContainerClass).removeClass(settings.activeSceneClass);
-            $('.'+settings.sceneContainerClass+'[data-scene="'+target+'"]').addClass(settings.activeSceneClass);
-            $('#'+settings.filmId).animate({left: offset}, time);
-            current = target;
-        },
-        next : function() {
-          if (  $('.'+settings.sceneContainerClass+'[data-scene="'+(current+1)+'"]').length ) {
-            target = current + 1;
-            methods.moveTo.apply();
-          }
-        },
-        prev : function() {
-          if (  $('.'+settings.sceneContainerClass+'[data-scene="'+(current-1)+'"]').length ) {
-            target = current -1;
-            methods.moveTo.apply();
-          }
-        },
-        play : function() {
-            console.log('play');
-            methods.next.apply();
-	    setTimeout(function(){
-              methods.play.apply();
-            }, 5000);
+            if (e.which == settings.arrowRight) {
+              methods.next.apply();
+            }
+          });
         }
+
+        methods.fixWidth.apply();
+      },
+      fixWidth : function() {
+        windowWidth = $(window).width();
+        // setting up scene container area to window width
+        // if the window is too small scene area is set to <width>
+        $('.' + settings.sceneContainerClass).width(windowWidth > settings.width ? windowWidth : settings.width);
+      },
+      moveTo: function() {
+        target = parseInt(target) || 1;
+        var offset = -(windowWidth * (target - 1)); // target - 1 because i have to move *to* X scene and not move *of* X scene
+        if (settings.fixedTimer) {
+          var time = settings.sceneTimer;
+        } else {
+          var time = Math.abs((target - current) * settings.sceneTimer); // absolute number for backward movements
+        }
+        $('.' + settings.sceneContainerClass).removeClass(settings.activeSceneClass);
+        $('.' + settings.sceneContainerClass + '[data-scene="' + target + '"]').addClass(settings.activeSceneClass);
+        $('#' + settings.filmId).animate({left: offset}, time);
+        current = target;
+      },
+      next: function() {
+        if ($('.' + settings.sceneContainerClass + '[data-scene="' + (current + 1) + '"]').length) {
+          target = current + 1;
+          methods.moveTo.apply();
+        }
+      },
+      prev: function() {
+        if ($('.' + settings.sceneContainerClass + '[data-scene="' + (current - 1) + '"]').length) {
+          target = current - 1;
+          methods.moveTo.apply();
+        }
+      },
+      play : function() {
+        console.log('play');
+        methods.next.apply();
+        setTimeout(function() {
+          methods.play.apply();
+        }, 5000);
+      }
     };
 
     // method setup
     return this.each(function(methodOrOptions) {
-      console.log('Method: '+methodOrOptions);
-      if ( methods[methodOrOptions] ) {
-        return methods[ methodOrOptions ].apply( this, Array.prototype.slice.call( arguments, 1 ));
-      } else if ( typeof methodOrOptions === 'object' || ! methodOrOptions ) {
-        return methods.init.apply( this, arguments );
+      console.log('Method: ' + methodOrOptions);
+      if (methods[methodOrOptions]) {
+        return methods[methodOrOptions].apply(this, Array.prototype.slice.call(arguments, 1));
+      } else if (typeof methodOrOptions === 'object' || !methodOrOptions) {
+        return methods.init.apply(this, arguments);
       } else {
-        $.error( 'Method ' +  method + ' was never seen over here o_O' );
+        $.error('Method ' +  method + ' was never seen over here o_O');
       }
     }); // end each
+
   }; // end plugin
-})( jQuery );
+})(jQuery);
